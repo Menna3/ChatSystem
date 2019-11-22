@@ -1,5 +1,5 @@
 class Chat < ApplicationRecord
-  belongs_to :application
+  belongs_to :application, touch: true
   has_many :messages, dependent: :destroy, class_name: "::ChatMessage"
     
   after_initialize :add_chat, if: :new_record?
@@ -12,6 +12,12 @@ class Chat < ApplicationRecord
          self.chat_number = application.chats.last.chat_number + 1
       end
       self.messages_count = '0'
+  end
+    
+  def messages_count
+    Rails.cache.fetch([cache_key, __method__], expires_in: 10.minutes) do
+      messages.count
+    end
   end
 
   # validations

@@ -1,5 +1,5 @@
 class Message < ApplicationRecord
-  belongs_to :chat
+  belongs_to :chat, touch: true
 
   after_initialize :add_message, if: :new_record?
     
