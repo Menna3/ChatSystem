@@ -17,12 +17,8 @@ class ChatMessagesController < ApplicationController
 
   # POST applications/:token/chats/:chat_number/messages
   def create
-#    @chat_message = ChatMessage.create application: @application, chat: @chat,
-#      message: params.dig(:chat_message, :message)
-#    ChatMessage.broadcast_to @chat, @chat_message
-      
-    @chat.messages.create!(message_params)
-    @message = @chat.messages.last.message_number
+    MessageJob.perform_later @chat.id, message_params.to_json 
+    @message = @chat.messages.last.message_number + 1
     json_response(@message, :created)
   end
 

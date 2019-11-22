@@ -15,9 +15,9 @@ class ChatsController < ApplicationController
   end
 
   # POST /applications/:token/chats
-  def create    
-    @application.chats.create!(chat_params)
-    @chat = @application.chats.last.chat_number
+  def create 
+    ChatJob.perform_later @application.id, chat_params.to_json
+    @chat = @application.chats.last.chat_number + 1
     json_response(@chat, :created)
   end
 
