@@ -1,0 +1,58 @@
+class ChatMessagesController < ApplicationController
+  include Response
+  include ExceptionHandler
+  before_action :set_application
+  before_action :set_application_chat
+  before_action :set_chat_message, only: [:show, :update, :destroy]
+
+  # GET /chats/:chat_number/messages
+  def index
+    json_response(@chat.messages)
+  end
+
+  # GET /chats/:chat_number/messages/:message_number
+  def show
+    json_response(@message)
+  end
+
+  # POST applications/:token/chats/:chat_number/messages
+  def create
+    @chat_message = ChatMessage.create application: @application, chat: @chat,
+      message: params.dig(:chat_message, :message)
+    ChatMessage.broadcast_to @chat, @chat_message
+      
+#    @chat.messages.create!(message_params)
+    @message = @chat.messages.last.message_number
+    json_response(@message, :created)
+  end
+
+  # PUT /chats/:chat_number/messages/:message_number
+  def update
+    @message.update(message_params)
+    head :no_content
+  end
+
+  # DELETE /chats/:chat_number/messages/:message_number
+  def destroy
+    @message.destroy(params[:message_number])
+    head :no_content
+  end
+
+  private
+
+  def message_params
+    params.permit(:message_body)
+  end
+
+  def set_application
+    @application = Application.where(token: params[:token]).take
+  end
+    
+  def set_application_chat
+    @chat = @application.chats.where!(chat_number: params[:chat_number]).take if @application
+  end
+
+  def set_chat_message
+    @message = @chat.messages.where!(message_number: params[:message_number]) if @chat
+  end
+end
