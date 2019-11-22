@@ -15,16 +15,10 @@ class ChatsController < ApplicationController
   end
 
   # POST /applications/:token/chats
-  def create
-#    @chat = Chat.create application: @application,
-#                        chat_name: params.dig(:chat, :chat_name)
-
-    
+  def create    
     @application.chats.create!(chat_params)
-#    ApplicationChannel.broadcast_to @application, @chat
-    @anything = @application.countChats
     @chat = @application.chats.last.chat_number
-    json_response(@anything, :created)
+    json_response(@chat, :created)
   end
 
   # PUT /applications/:token/chats/:chat_number
