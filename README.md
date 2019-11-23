@@ -36,6 +36,7 @@ docker build -t chatsystem
  
  ##Get Authenticated
  ###Sign up
+ 
  Go to route:
  ```
 POST /signup
@@ -53,6 +54,7 @@ Then a token will be returned.
 Use it in the header while requesting any other endpoint in the app.
 
 ###Login
+
 Go to route:
  ```
 POST /auth/login
@@ -66,7 +68,9 @@ Request Body Example:
 ```
 
 ##Create an Application
+
 ###Request
+
  ```
 POST /applications
 ```
@@ -76,12 +80,15 @@ Request Body Example:
    "app_name": "My first app"
 }
 ```
+
 ###Response
+
 ```
 A generated token
 ```
 
 ##Create a Chat
+
 ###Request
  ```
 POST /applications/:app_token/chats
@@ -92,13 +99,17 @@ Request Body Example:
    "chat_name": "My first chat"
 }
 ```
+
 ###Response
+
 ```
 Chat number
 ```
 
 ##Create a Message
+
 ###Request
+
  ```
 POST /applications/:app_token/chats/:chat_number/messages
 ```
@@ -108,12 +119,15 @@ Request Body Example:
    "message_body": "My first message"
 }
 ```
+
 ###Response
+
 ```
 Message number
 ```
 
 ##All Endpoints
+
 ```
   #Applications Endpoints
   get 'applications', to: 'applications#index'
@@ -138,8 +152,8 @@ Message number
   get 'search', to: 'chat_messages#search'
 ```
 
-
 ##Search Messages
+
 You can search through messages of a specific chat 
 and partially match messages’ bodies.
 
@@ -151,6 +165,7 @@ GET /search?chat_id=id&query=msg
 ```
 
 ## Job queues
+
 Two jobs for the chat and message creation were done in order to handle race conditions and to minimize the queries 
 and avoid writing directly to MySQL while serving the 
 requests.
@@ -159,6 +174,7 @@ ActiveJob `perform_later` was used to enqueue a job to be
 performed as soon as the queuing system is free.
 
 ##CronJob
+
 And using Sidekiq-cron, a cronjob is scheduled every hour 
 to count and persist column `chats_number` in the applications 
 table, and the `messages_number` in the chats table. 
