@@ -169,7 +169,7 @@ GET /search?chat_id=id&query=msg
 
 Two jobs for the chat and message creation were done in order to handle race conditions and to minimize the queries 
 and avoid writing directly to MySQL while serving the 
-requests.
+requests, and use REDIS-SERVER to store temporarily.
 
 ActiveJob `perform_later` was used to enqueue a job to be 
 performed as soon as the queuing system is free.
