@@ -34,7 +34,7 @@ class ChatMessagesController < ApplicationController
     head :no_content
   end
     
-  # GET /search?q=msg
+  # GET /search?chat_id=id&query=msg
   def search
     @messages = params[:query].nil? ? [] : ChatMessage.searchES(params[:chat_id], params[:query]).records
     json_response(@messages)

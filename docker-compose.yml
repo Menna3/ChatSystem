@@ -1,0 +1,136 @@
+version: '3.3'
+
+services:
+  mysql:
+    restart: always
+    image: mysql:5.7
+    container_name: chatsystem-db-2
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./store/:/var/lib/mysql
+    networks:
+      - mysqlnetwork
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=local
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+
+  mysql-admin:
+    restart: always
+    image: phpmyadmin/phpmyadmin
+    container_name: chatsystem-db-2-phpmyadmin
+    ports:
+      - "8001:80"
+    networks:
+      - mysqlnetwork
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+
+  redis-server:
+    restart: always
+    image: redis:4.0
+    container_name: redis-server
+    command: /bin/bash -c 'redis-server --appendonly yes'
+    sysctls:
+      - net.core.somaxconn=65535
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis:/data
+    networks:
+      - mysqlnetwork
+      
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - ELASTIC_HOST: "elastic"
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    container_name: es03
+    environment:
+      - node.name=es03
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+      
+  sidekiq:
+    depends_on:
+      - 'mysql'
+      - 'redis-server'
+    build: .
+    command: sidekiq -C config/sidekiq.yml.erb
+    volumes:
+      - '.:/app'
+      
+volumes:
+  mysql:
+    driver: local
+  redis:
+    driver: local
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+
+networks:
+  mysqlnetwork:
+    driver: bridge
+  ELASTIC_HOST: "elastic"
