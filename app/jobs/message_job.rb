@@ -1,5 +1,5 @@
 class MessageJob < ApplicationJob
-  queue_as :default
+  queue_as :high
 
   def perform(chat_id, message_params)
       @chat = Chat.find(chat_id)

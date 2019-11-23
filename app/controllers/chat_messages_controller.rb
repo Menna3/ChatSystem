@@ -18,7 +18,7 @@ class ChatMessagesController < ApplicationController
   # POST applications/:token/chats/:chat_number/messages
   def create
     MessageJob.perform_later @chat.id, message_params.to_json 
-    @message = @chat.messages.last.message_number + 1
+    @message = @chat.messages.count == 0? 1: @chat.messages.last.message_number + 1
     json_response(@message, :created)
   end
 
@@ -32,6 +32,12 @@ class ChatMessagesController < ApplicationController
   def destroy
     @message.destroy(params[:message_number])
     head :no_content
+  end
+    
+  # GET /search?q=msg
+  def search
+    @messages = params[:query].nil? ? [] : ChatMessage.searchES(params[:chat_id], params[:query]).records
+    json_response(@messages)
   end
 
   private

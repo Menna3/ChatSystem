@@ -1,5 +1,5 @@
 class ChatJob < ApplicationJob
-  queue_as :default
+  queue_as :high
 
   def perform(application_id, chat_params)
       #create chat here

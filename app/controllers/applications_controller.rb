@@ -6,13 +6,14 @@ class ApplicationsController < ApplicationController
   # GET /applications
   def index
     @applications = current_user.applications
+#    Applications.search('app').records
     json_response(@applications)
   end
 
   # POST /applications
   def create
     @application = current_user.applications.create!(application_params)
-    json_response(@application, :created)
+    json_response(@application.token, :created)
   end
 
   # GET /applications/:token
