@@ -34,8 +34,9 @@ git clone https://github.com/Menna3/ChatSystem.git
 docker build -t chatsystem
  ```
  
- ##Get Authenticated
- ###Sign up
+ ## Get Authenticated
+ 
+ ### Sign up
  
  Go to route:
  ```
@@ -53,7 +54,7 @@ Request Body Example:
 Then a token will be returned.
 Use it in the header while requesting any other endpoint in the app.
 
-###Login
+### Login
 
 Go to route:
  ```
@@ -67,9 +68,9 @@ Request Body Example:
 }
 ```
 
-##Create an Application
+## Create an Application
 
-###Request
+### Request
 
  ```
 POST /applications
@@ -81,15 +82,15 @@ Request Body Example:
 }
 ```
 
-###Response
+### Response
 
 ```
 A generated token
 ```
 
-##Create a Chat
+## Create a Chat
 
-###Request
+### Request
  ```
 POST /applications/:app_token/chats
 ```
@@ -100,15 +101,15 @@ Request Body Example:
 }
 ```
 
-###Response
+### Response
 
 ```
 Chat number
 ```
 
-##Create a Message
+## Create a Message
 
-###Request
+### Request
 
  ```
 POST /applications/:app_token/chats/:chat_number/messages
@@ -120,13 +121,13 @@ Request Body Example:
 }
 ```
 
-###Response
+### Response
 
 ```
 Message number
 ```
 
-##All Endpoints
+## All Endpoints
 
 ```
   #Applications Endpoints
@@ -152,7 +153,7 @@ Message number
   get 'search', to: 'chat_messages#search'
 ```
 
-##Search Messages
+## Search Messages
 
 You can search through messages of a specific chat 
 and partially match messages’ bodies.
@@ -173,7 +174,7 @@ requests.
 ActiveJob `perform_later` was used to enqueue a job to be 
 performed as soon as the queuing system is free.
 
-##CronJob
+## CronJob
 
 And using Sidekiq-cron, a cronjob is scheduled every hour 
 to count and persist column `chats_number` in the applications 
