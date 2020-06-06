@@ -91,8 +91,11 @@ GEM
     minitest (5.13.0)
     multi_json (1.14.1)
     multipart-post (2.1.1)
+    mysql2 (0.5.2)
     mysql2 (0.5.2-x86-mingw32)
     nio4r (2.5.2)
+    nokogiri (1.10.5)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.5-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     puma (3.12.1)
@@ -151,9 +154,10 @@ GEM
       tzinfo (>= 1.0.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
