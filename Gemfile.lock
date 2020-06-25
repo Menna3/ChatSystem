@@ -91,13 +91,16 @@ GEM
     minitest (5.13.0)
     multi_json (1.14.1)
     multipart-post (2.1.1)
+    mysql2 (0.5.2)
     mysql2 (0.5.2-x86-mingw32)
     nio4r (2.5.2)
+    nokogiri (1.10.5)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.5-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     puma (3.12.1)
     raabro (1.1.6)
-    rack (2.0.7)
+    rack (2.2.3)
     rack-protection (2.0.7)
       rack
     rack-test (1.1.0)
@@ -154,6 +157,7 @@ GEM
     websocket-extensions (0.1.4)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
