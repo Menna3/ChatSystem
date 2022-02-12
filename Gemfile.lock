@@ -91,11 +91,15 @@ GEM
     minitest (5.13.0)
     multi_json (1.14.1)
     multipart-post (2.1.1)
+    mysql2 (0.5.2)
     mysql2 (0.5.2-x86-mingw32)
     nio4r (2.5.2)
+    nokogiri (1.10.5)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.5-x86-mingw32)
       mini_portile2 (~> 2.4.0)
-    puma (3.12.1)
+    puma (4.3.11)
+      nio4r (~> 2.0)
     raabro (1.1.6)
     rack (2.0.7)
     rack-protection (2.0.7)
@@ -155,6 +159,7 @@ GEM
 
 PLATFORMS
   x86-mingw32
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
@@ -166,7 +171,7 @@ DEPENDENCIES
   faker
   jwt
   mysql2 (>= 0.3.18, < 0.6.0)
-  puma (~> 3.7)
+  puma (~> 4.3)
   rails (~> 5.1.7)
   redis (~> 3.3, >= 3.3.3)
   shoulda-matchers (~> 3.1)
